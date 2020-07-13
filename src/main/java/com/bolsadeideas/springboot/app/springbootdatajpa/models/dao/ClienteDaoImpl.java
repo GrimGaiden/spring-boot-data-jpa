@@ -3,6 +3,7 @@ package com.bolsadeideas.springboot.app.springbootdatajpa.models.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.bolsadeideas.springboot.app.springbootdatajpa.models.entity.Cliente;
 
@@ -12,11 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class ClienteDaoImpl implements ClienteDao {
 
+    @PersistenceContext
     private EntityManager em;
 
     @Transactional(readOnly = true)
     @Override
-    public List<Cliente> listAll() {
+    public List<Cliente> findAll() {
         return em.createQuery("from Cliente").getResultList();
     }
     
