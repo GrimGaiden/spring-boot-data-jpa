@@ -4,8 +4,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import com.bolsadeideas.springboot.app.springbootdatajpa.models.dao.ClienteDao;
 import com.bolsadeideas.springboot.app.springbootdatajpa.models.entity.Cliente;
+import com.bolsadeideas.springboot.app.springbootdatajpa.models.service.ClienteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -24,12 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ClienteController {
     
     @Autowired
-    private ClienteDao clienteDao;
+    private ClienteService clienteService;
 
     @GetMapping("/listar")
     public String listar(Model model) {
         model.addAttribute("titulo", "Listado de clientes");
-        model.addAttribute("clientes", clienteDao.findAll());
+        model.addAttribute("clientes", clienteService.findAll());
         return "listar";
     }
 
@@ -46,7 +45,7 @@ public class ClienteController {
     public String editar(@PathVariable(name = "id") Long id, Map<String, Object> model) {
 
         if(id > 0) {
-            Cliente cliente = clienteDao.findOne(id);
+            Cliente cliente = clienteService.findOne(id);
             model.put("cliente", cliente);
             model.put("titulo", "Formulario de Cliente");
             return "form";
@@ -66,7 +65,7 @@ public class ClienteController {
             model.addAttribute("titulo", "Formulario de Cliente");
             return "form";
         }
-        clienteDao.save(cliente);
+        clienteService.save(cliente);
         status.setComplete();
         return "redirect:listar";
     }
@@ -74,7 +73,7 @@ public class ClienteController {
     @GetMapping(value="/eliminar/{id}")
     public String eliminar(@PathVariable(name = "id") Long id) {
         if(id > 0) {
-            clienteDao.delete(id);
+            clienteService.delete(id);
         }
         return "redirect:/listar";
     }
