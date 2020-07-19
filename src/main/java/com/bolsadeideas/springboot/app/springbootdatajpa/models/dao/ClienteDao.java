@@ -11,4 +11,6 @@ public interface ClienteDao {
     void save(Cliente cliente);
 
     Cliente findOne(Long id);
+
+    void delete(Long id);
 }

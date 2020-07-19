@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @SessionAttributes("cliente")
@@ -68,4 +70,13 @@ public class ClienteController {
         status.setComplete();
         return "redirect:listar";
     }
+
+    @GetMapping(value="/eliminar/{id}")
+    public String eliminar(@PathVariable(name = "id") Long id) {
+        if(id > 0) {
+            clienteDao.delete(id);
+        }
+        return "redirect:/listar";
+    }
+    
 }
