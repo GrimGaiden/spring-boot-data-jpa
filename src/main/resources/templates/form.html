@@ -6,12 +6,13 @@
 
 <body>
     <header th:replace="layout/layout :: header"></header>
-    <div class="container">
-        <h1 class="text-secondary border border-success border-left-0 border-top-0 border-right-0" th:text="${titulo}">
-        </h1>
+    <div class="container py-4">
+        <div class="card bg-dark text-white">
+            <div class="card-header" th:text="${titulo}"></div>
+            <div class="card-body">
 
-        <div th:object="${cliente}" th:remove="tag">
-            <ul th:if="@{#fields.hasErrors('*')}" class="alert alert-danger">
+                <div th:object="${cliente}" th:remove="tag">
+                    <ul th:if="@{#fields.hasErrors('*')}" class="alert alert-danger">
                 <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
             </ul>
         </div>
@@ -46,10 +47,12 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-2">
-                    <input type="submit" value="Crear Cliente" class="btn btn-primary" />
+                    <input type="submit" value="Crear Cliente" class="btn btn-secondary" />
                 </div>
             </div>
         </form>
+            </div>
+        </div>
     </div>
     <footer th:replace="layout/layout :: footer"></footer>
 </body>
