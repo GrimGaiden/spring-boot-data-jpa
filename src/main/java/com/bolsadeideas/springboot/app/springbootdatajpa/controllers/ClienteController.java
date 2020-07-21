@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import com.bolsadeideas.springboot.app.springbootdatajpa.models.entity.Cliente;
 import com.bolsadeideas.springboot.app.springbootdatajpa.models.service.ClienteService;
+import com.bolsadeideas.springboot.app.springbootdatajpa.util.paginator.PageRender;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,8 +36,11 @@ public class ClienteController {
 
         Pageable pageRequest = PageRequest.of(page, 4);
         Page<Cliente> clientes = clienteService.findAll(pageRequest);
+        PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
+
         model.addAttribute("titulo", "Listado de clientes");
         model.addAttribute("clientes", clientes);
+        model.addAttribute("page", pageRender);
         return "listar";
     }
 
