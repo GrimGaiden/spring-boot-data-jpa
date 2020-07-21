@@ -4,8 +4,13 @@ import java.util.List;
 
 import com.bolsadeideas.springboot.app.springbootdatajpa.models.entity.Cliente;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface ClienteService {
     List<Cliente> findAll();
+
+    Page<Cliente> findAll(Pageable pageable);
 
     Cliente findOne(Long id);
 
