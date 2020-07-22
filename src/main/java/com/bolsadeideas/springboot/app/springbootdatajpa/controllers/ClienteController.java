@@ -1,5 +1,9 @@
 package com.bolsadeideas.springboot.app.springbootdatajpa.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -21,13 +25,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 
 @Controller
 @SessionAttributes("cliente")
 public class ClienteController {
-    
+
     @Autowired
     private ClienteService clienteService;
 
@@ -56,31 +60,47 @@ public class ClienteController {
     @GetMapping("/form/{id}")
     public String editar(@PathVariable(name = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
 
-        if(id > 0) {
+        if (id > 0) {
             Cliente cliente = clienteService.findOne(id);
-            if(cliente == null) {
+            if (cliente == null) {
                 flash.addFlashAttribute("error", "El cliente no existe en la BBDD!");
                 return "redirect:/listar";
             }
             model.put("cliente", cliente);
             model.put("titulo", "Formulario de Cliente");
             return "form";
-        }
-        else {
+        } else {
             flash.addFlashAttribute("error", "El ID del cliente no puede ser cero!");
             return "redirect:/listar";
         }
     }
 
-    //Para pasar al formulario el objeto cliente al haber error tienen que coincider el nombre de la clase "Cliente" y el
-    //nombre con el que se utiliza en la vista, si no hay que especificar el nombre utilizado en los atributos del POST con
-    //@ModelAttribute("nombre que se envía a la vista")
+    // Para pasar al formulario el objeto cliente al haber error tienen que
+    // coincider el nombre de la clase "Cliente" y el
+    // nombre con el que se utiliza en la vista, si no hay que especificar el nombre
+    // utilizado en los atributos del POST con
+    // @ModelAttribute("nombre que se envía a la vista")
     @PostMapping("/form")
-    public String guardar(@Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes flash, SessionStatus status) {
+    public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
+            @RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
 
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             model.addAttribute("titulo", "Formulario de Cliente");
             return "form";
+        }
+        if (!foto.isEmpty()) {
+            Path directorioRecursos = Paths.get("src//main//resources//static//uploads");
+            String rootPath = directorioRecursos.toFile().getAbsolutePath();
+            try {
+                byte[] bytes = foto.getBytes();
+                Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
+                Files.write(rutaCompleta, bytes);
+                flash.addFlashAttribute("info","Has subido correctamente '" + foto.getOriginalFilename() + "'");
+                cliente.setFoto(foto.getOriginalFilename());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         String mensajeFlash = (cliente.getId() != null)? "Cliente editado con éxito": "Cliente creado con éxito";
         clienteService.save(cliente);
