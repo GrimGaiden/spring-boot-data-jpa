@@ -103,11 +103,10 @@ public class ClienteController {
             return "form";
         }
         if (!foto.isEmpty()) {
-            Path directorioRecursos = Paths.get("src//main//resources//static//uploads");
-            String rootPath = directorioRecursos.toFile().getAbsolutePath();
+            String rootPath = "/home/enol/uploads/";
             try {
                 byte[] bytes = foto.getBytes();
-                Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
+                Path rutaCompleta = Paths.get(rootPath + foto.getOriginalFilename());
                 Files.write(rutaCompleta, bytes);
                 flash.addFlashAttribute("info","Has subido correctamente '" + foto.getOriginalFilename() + "'");
                 cliente.setFoto(foto.getOriginalFilename());
