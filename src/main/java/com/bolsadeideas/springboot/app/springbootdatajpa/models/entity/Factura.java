@@ -102,5 +102,15 @@ public class Factura implements Serializable{
         items.add(item);
     }
 
+    public Double getTotal() {
+        Double total = 0.0;
+
+        for (ItemFactura itemFactura : items) {
+            total += itemFactura.calcularImporte();
+        }
+
+        return total;
+    }
+
     private static final long serialVersionUID = 1L;
 }
