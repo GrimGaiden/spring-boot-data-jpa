@@ -19,7 +19,7 @@ public class Producto implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private String nombre;
     private Double precio;
 
@@ -32,11 +32,11 @@ public class Producto implements Serializable {
         createAt = new Date();
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
