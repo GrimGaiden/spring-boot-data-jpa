@@ -3,7 +3,9 @@ package com.bolsadeideas.springboot.app.springbootdatajpa.models.service;
 import java.util.List;
 
 import com.bolsadeideas.springboot.app.springbootdatajpa.models.dao.ClienteDao;
+import com.bolsadeideas.springboot.app.springbootdatajpa.models.dao.ProductoDao;
 import com.bolsadeideas.springboot.app.springbootdatajpa.models.entity.Cliente;
+import com.bolsadeideas.springboot.app.springbootdatajpa.models.entity.Producto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private ClienteDao clienteDao;
+
+    @Autowired
+    private ProductoDao productoDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -45,6 +50,12 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional
     public void delete(Long id) {
         clienteDao.deleteById(id);
+    }
+
+    @Override
+    public List<Producto> findByNombre(String term) {
+
+        return productoDao.findByNombreLikeIgnoreCase("%"+term+"%");
     }
     
 }
